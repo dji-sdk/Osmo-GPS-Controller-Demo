@@ -106,19 +106,12 @@ CommandResult send_command(uint8_t cmd_set, uint8_t cmd_id, uint8_t cmd_type, co
 
     ESP_LOGI(TAG, "Protocol frame created successfully, length: %zu", frame_length);
 
-    // Print ByteArray format for debugging
-    // 打印 ByteArray 格式，便于调试
-    printf("\033[96m");  // 设置青色输出
-    printf("TX: [");
-    for (size_t i = 0; i < frame_length; i++) {
-        printf("%02X", protocol_frame[i]);
-        if (i < frame_length - 1) {
-            printf(", ");
-        }
-    }
-    printf("] (%zu bytes)\n", frame_length);
-    printf("\033[0m");
-    printf("\033[0;32m");
+    // Print ByteArray format for debugging (only formats/outputs when log level is DEBUG or
+    // higher; avoids per-byte printf() overhead on every command send, which previously ran
+    // unconditionally on the hot path, e.g. periodic GPS pushes).
+    // 打印 ByteArray 格式，便于调试（仅在日志级别为 DEBUG 及以上时才会格式化输出，
+    // 避免此前每次发送命令都无条件执行的逐字节 printf() 开销，例如周期性的 GPS 推送）。
+    ESP_LOG_BUFFER_HEX_LEVEL(TAG, protocol_frame, frame_length, ESP_LOG_DEBUG);
 
     void *structure_data = NULL;
     size_t structure_data_length = 0;
