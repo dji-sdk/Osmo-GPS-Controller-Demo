@@ -980,23 +980,8 @@ static void process_notification_data(const uint8_t *raw_data, size_t raw_data_l
     if (raw_data[0] == 0xAA || raw_data[0] == 0xaa) {
         ESP_LOGI(TAG, "Notification received, attempting to parse...");
 
-        // ESP_LOG_BUFFER_HEX(TAG, raw_data, raw_data_length);  // Print notification content
-                                                                // 打印通知内容
+        ESP_LOG_BUFFER_HEX_LEVEL(TAG, raw_data, raw_data_length, ESP_LOG_DEBUG);
 
-        // Print notification content in pink color
-        // 用粉色打印通知内容
-        printf("\033[95m");
-        printf("RX: [");
-        for (size_t i = 0; i < raw_data_length; i++) {
-            printf("%02X", raw_data[i]);
-            if (i < raw_data_length - 1) {
-                printf(", ");
-            }
-        }
-        printf("] (%zu bytes)\n", raw_data_length);
-        printf("\033[0m");
-        printf("\033[0;32m");
-                                                             
         // Define parsing result structure
         // 定义解析结果结构体
         protocol_frame_t frame;
