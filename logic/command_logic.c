@@ -106,19 +106,7 @@ CommandResult send_command(uint8_t cmd_set, uint8_t cmd_id, uint8_t cmd_type, co
 
     ESP_LOGI(TAG, "Protocol frame created successfully, length: %zu", frame_length);
 
-    // Print ByteArray format for debugging
-    // 打印 ByteArray 格式，便于调试
-    printf("\033[96m");  // 设置青色输出
-    printf("TX: [");
-    for (size_t i = 0; i < frame_length; i++) {
-        printf("%02X", protocol_frame[i]);
-        if (i < frame_length - 1) {
-            printf(", ");
-        }
-    }
-    printf("] (%zu bytes)\n", frame_length);
-    printf("\033[0m");
-    printf("\033[0;32m");
+    ESP_LOG_BUFFER_HEX_LEVEL(TAG, protocol_frame, frame_length, ESP_LOG_DEBUG);
 
     void *structure_data = NULL;
     size_t structure_data_length = 0;
